@@ -15,15 +15,15 @@ export default function ProductReviews() {
   const [comment, setComment] = useState("");
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    const fetchData = async () => {
+  /* ✅ DEFINE fetchData OUTSIDE so it can be reused */
+  const fetchData = async () => {
     try {
       const productRes = await axios.get(
-        `${process.env.REACT_APP_API_URL}/api/products/${id}`
+        process.env.REACT_APP_API_URL + "/api/products/" + id
       );
 
       const reviewRes = await axios.get(
-        `${process.env.REACT_APP_API_URL}/api/reviews/${id}`
+        process.env.REACT_APP_API_URL + "/api/reviews/" + id
       );
 
       setProduct(productRes.data);
@@ -31,10 +31,10 @@ export default function ProductReviews() {
 
       if (user) {
         const orderRes = await axios.get(
-          "${process.env.REACT_APP_API_URL}/api/orders/my",
+          process.env.REACT_APP_API_URL + "/api/orders/my",
           {
             headers: {
-              Authorization: `Bearer ${user.token}`,
+              Authorization: "Bearer " + user.token,
             },
           }
         );
@@ -54,10 +54,11 @@ export default function ProductReviews() {
       setLoading(false);
     }
   };
+
+  /* ✅ useEffect */
+  useEffect(() => {
     fetchData();
   }, [id]);
-
-  
 
   const submitReview = async () => {
     if (!comment.trim()) {
@@ -67,7 +68,7 @@ export default function ProductReviews() {
 
     try {
       await axios.post(
-        "${process.env.REACT_APP_API_URL}/api/reviews",
+        process.env.REACT_APP_API_URL + "/api/reviews",
         {
           productId: id,
           rating,
@@ -75,7 +76,7 @@ export default function ProductReviews() {
         },
         {
           headers: {
-            Authorization: `Bearer ${user.token}`,
+            Authorization: "Bearer " + user.token,
           },
         }
       );
@@ -83,7 +84,8 @@ export default function ProductReviews() {
       toast.success("Review submitted!");
       setComment("");
       setRating(5);
-      fetchData();
+
+      fetchData(); // ✅ now this works
     } catch (error) {
       toast.error(error.response?.data?.message || "Error");
     }
@@ -113,7 +115,7 @@ export default function ProductReviews() {
 
       <div className="bg-white rounded-2xl shadow-lg p-8 mb-10 flex flex-col md:flex-row gap-8">
         <img
-          src={`${process.env.REACT_APP_API_URL}${product.image}`}
+          src={process.env.REACT_APP_API_URL + product.image}
           alt={product.name}
           className="w-56 h-56 object-contain bg-gray-100 rounded-xl"
         />
@@ -152,9 +154,7 @@ export default function ProductReviews() {
 
           <select
             value={rating}
-            onChange={(e) =>
-              setRating(Number(e.target.value))
-            }
+            onChange={(e) => setRating(Number(e.target.value))}
             className="border p-2 rounded mb-4"
           >
             <option value={5}>5 Stars</option>
@@ -166,9 +166,7 @@ export default function ProductReviews() {
 
           <textarea
             value={comment}
-            onChange={(e) =>
-              setComment(e.target.value)
-            }
+            onChange={(e) => setComment(e.target.value)}
             placeholder="Write your review..."
             className="border p-2 rounded w-full mb-4"
           />
