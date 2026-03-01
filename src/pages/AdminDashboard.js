@@ -35,9 +35,9 @@ export default function Admin() {
         };
 
         const [summary, vendorData, customerData] = await Promise.all([
-          axios.get("${process.env.REACT_APP_API_URL}/api/admin/summary", config),
-          axios.get("${process.env.REACT_APP_API_URL}/api/admin/vendors", config),
-          axios.get("${process.env.REACT_APP_API_URL}/api/admin/customers", config),
+          axios.get(process.env.REACT_APP_API_URL + "/api/admin/summary", config),
+          axios.get(process.env.REACT_APP_API_URL + "/api/admin/vendors", config),
+          axios.get(process.env.REACT_APP_API_URL + "/api/admin/customers", config),
         ]);
 
         setStats(summary.data);
