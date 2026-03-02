@@ -22,9 +22,9 @@ export default function Register() {
       setLoading(true);
 
       await axios.post(
-        "${process.env.REACT_APP_API_URL}/api/auth/register",
-        form
-      );
+  `${process.env.REACT_APP_API_URL}/api/auth/register`,
+  { name, email, password, role }
+);
 
       alert("Registration successful!");
       navigate("/login");
