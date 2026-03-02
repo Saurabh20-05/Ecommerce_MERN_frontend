@@ -17,10 +17,9 @@ export default function Login() {
     setLoading(true);
 
     const res = await axios.post(
-      "${process.env.REACT_APP_API_URL}/api/auth/login",
-      form
-    );
-
+  `${process.env.REACT_APP_API_URL}/api/auth/login`,
+  form
+);
     login(res.data);
 
     const role = res.data.user.role;
