@@ -23,7 +23,12 @@ export default function Register() {
 
       await axios.post(
   `${process.env.REACT_APP_API_URL}/api/auth/register`,
-  { name, email, password, role }
+  {
+    name: form.name,
+    email: form.email,
+    password: form.password,
+    role: form.role,
+  }
 );
 
       alert("Registration successful!");
